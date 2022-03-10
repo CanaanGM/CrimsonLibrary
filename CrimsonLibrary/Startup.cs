@@ -1,5 +1,8 @@
+using CrimsonLibrary.Data.DataAccess;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,6 +33,13 @@ namespace CrimsonLibrary
                         );
                 }
             );
+            var name = Configuration["SQLServer:User"];
+            var pass = Configuration["SQLServer:Pass"];
+
+            services.AddDbContext<DatabaseContext>(options =>
+                options.UseSqlServer(Configuration["ConnectionStrings:SqlServer"] + $"user id={name}; password={pass}")
+            );
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CrimsonLibrary", Version = "v1" });
