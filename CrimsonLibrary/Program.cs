@@ -1,5 +1,6 @@
 using CrimsonLibrary.Data.DataAccess;
 using CrimsonLibrary.Data.ModelHelpers;
+using CrimsonLibrary.Data.Models;
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -40,9 +41,10 @@ namespace CrimsonLibrary
             try
             {
                 var context = services.GetRequiredService<DatabaseContext>();
+                var userManager = services.GetRequiredService<UserManager<ApiUser>>();
                 Log.Information("Migrating Database . . .");
                 await context.Database.MigrateAsync(); 
-                await Seed.SeedData(context);
+                await Seed.SeedData(context, userManager);
                 Log.Information("Migrating Done~! . . .");
                 
                 Log.Information("Application is starting . . .");

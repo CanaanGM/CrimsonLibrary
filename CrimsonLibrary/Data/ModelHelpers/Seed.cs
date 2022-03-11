@@ -6,12 +6,14 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using CrimsonLibrary.Data.Models.JoinTables;
+using CrimsonLibrary.Data.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace CrimsonLibrary.Data.ModelHelpers
 {
     public static class Seed
     {
-        public static async Task SeedData(DatabaseContext context)
+        public static async Task SeedData(DatabaseContext context, UserManager<ApiUser> userManager)
         {
             if (
                !context.Animes.Any() &&
@@ -21,9 +23,43 @@ namespace CrimsonLibrary.Data.ModelHelpers
                !context.Exercises.Any() &&
                !context.MusicTracks.Any() &&
                !context.BodyBuildingWorkouts.Any() &&
-               !context.Mangas.Any()
+               !context.Mangas.Any() &&
+               !userManager.Users.Any()
+
                )
             {
+                var users = new List<ApiUser>
+                {
+                    new ApiUser
+                    {
+                        FirstName = "Canaan",
+                        LastName = "===",
+                        Email = "canaan@test.com",
+                    },
+                    new ApiUser
+                    {
+                        FirstName = "Alphrad",
+                        LastName = "===",
+                        Email = "alphrad@test.com",
+                    },
+                    new ApiUser
+                    {
+                        FirstName = "Dante",
+                        LastName = "===",
+                        Email = "dante@test.com",
+                    },
+                    new ApiUser
+                    {
+                        FirstName = "Vergil",
+                        LastName = "===",
+                        Email = "vergil@test.com"
+                    },
+                };
+                foreach (var user in users)
+                {
+                    await userManager.CreateAsync(user, "Pas$$w0rd!");
+                }
+
                 var Books = new List<Book>{
                 new Book
                 {
@@ -68,7 +104,6 @@ namespace CrimsonLibrary.Data.ModelHelpers
                     },
 
                 };
-
                 await context.Books.AddRangeAsync(Books);
 
                 var Anime = new List<Anime> {
@@ -295,6 +330,8 @@ namespace CrimsonLibrary.Data.ModelHelpers
                 };
                 foreach(var leg in exersises) bbWorkouts[0].Excersises.Add(leg);
                 await context.BodyBuildingWorkouts.AddRangeAsync(bbWorkouts);
+
+
 
                 await context.SaveChangesAsync();
             }

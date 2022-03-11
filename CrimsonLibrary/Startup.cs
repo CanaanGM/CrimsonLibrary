@@ -2,6 +2,8 @@ using CrimsonLibrary.Data.DataAccess;
 using CrimsonLibrary.Data.IReopsitory;
 using CrimsonLibrary.Data.Models.DtoProfiles;
 using CrimsonLibrary.Data.Repository;
+using CrimsonLibrary.Extensions;
+using CrimsonLibrary.Services;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +29,10 @@ namespace CrimsonLibrary
         {
             services.AddControllers().AddNewtonsoftJson(op => 
                     op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            
+            services.AddAuthentication();
+            services.ConfigureIdentity();
+            services.ConfigureJWT(Configuration);
 
             services.AddCors(
                 x =>
@@ -45,8 +51,10 @@ namespace CrimsonLibrary
                 options.UseSqlServer(Configuration["ConnectionStrings:SqlServer"] + $"user id={name}; password={pass}")
             );
 
+
             services.AddAutoMapper(typeof(MapperProfiles));
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IAuthManager, AuthManager>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CrimsonLibrary", Version = "v1" });
@@ -71,6 +79,7 @@ namespace CrimsonLibrary
             
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

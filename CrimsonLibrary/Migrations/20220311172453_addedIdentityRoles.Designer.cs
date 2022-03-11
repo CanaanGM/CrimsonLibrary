@@ -4,14 +4,16 @@ using CrimsonLibrary.Data.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CrimsonLibrary.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220311172453_addedIdentityRoles")]
+    partial class addedIdentityRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -584,15 +586,15 @@ namespace CrimsonLibrary.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ca24492c-443c-412c-8795-f335877d3c09",
-                            ConcurrencyStamp = "fa8cc905-46b6-4b13-8ec6-e90ca10288e3",
+                            Id = "569b177e-98a9-4704-add7-e3b2b5af5910",
+                            ConcurrencyStamp = "cf4ac4b1-7252-4264-a68d-f72a371d2199",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "c5676b88-1d8c-4829-9eb2-a52ddd2849e0",
-                            ConcurrencyStamp = "6de2acd0-1d41-48a7-9655-a374c8179587",
+                            Id = "3341b505-aa48-43fd-b17c-d1d71ae60848",
+                            ConcurrencyStamp = "c0b7ad13-5e9e-4ba5-9dba-20bf784a8807",
                             Name = "Adminstrator",
                             NormalizedName = "ADMINSTRATOR"
                         });
