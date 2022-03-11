@@ -32,6 +32,10 @@ namespace CrimsonLibrary.Data.Models.DtoProfiles
 
             CreateMap<Workout_BodyBuilding, WorkoutCreateDto>().ReverseMap();
             CreateMap<Workout_BodyBuilding, WorkoutDto>().ReverseMap();
+
+
+            CreateMap<ApiUser, UserDto>().ReverseMap();
+
         }
     }
 }

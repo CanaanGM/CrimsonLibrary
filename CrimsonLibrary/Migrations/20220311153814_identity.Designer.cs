@@ -4,14 +4,16 @@ using CrimsonLibrary.Data.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CrimsonLibrary.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220311153814_identity")]
+    partial class identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -580,22 +582,6 @@ namespace CrimsonLibrary.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "ca24492c-443c-412c-8795-f335877d3c09",
-                            ConcurrencyStamp = "fa8cc905-46b6-4b13-8ec6-e90ca10288e3",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = "c5676b88-1d8c-4829-9eb2-a52ddd2849e0",
-                            ConcurrencyStamp = "6de2acd0-1d41-48a7-9655-a374c8179587",
-                            Name = "Adminstrator",
-                            NormalizedName = "ADMINSTRATOR"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

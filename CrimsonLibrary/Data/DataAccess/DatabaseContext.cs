@@ -1,11 +1,14 @@
-﻿using CrimsonLibrary.Data.Models.Domain;
+﻿using CrimsonLibrary.Data.Configuration;
+using CrimsonLibrary.Data.Models;
+using CrimsonLibrary.Data.Models.Domain;
 using CrimsonLibrary.Data.Models.JoinTables;
 
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CrimsonLibrary.Data.DataAccess
 {
-    public class DatabaseContext : DbContext
+    public class DatabaseContext : IdentityDbContext<ApiUser>
     {
         public DatabaseContext(DbContextOptions options) : base(options)
         {
@@ -37,6 +40,18 @@ namespace CrimsonLibrary.Data.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            //modelBuilder.ApplyConfiguration(new AnimeConfiguration());
+            //modelBuilder.ApplyConfiguration(new BookConfiguration());
+            //modelBuilder.ApplyConfiguration(new BoughtItemConfiguration());
+            //modelBuilder.ApplyConfiguration(new ExerciseConfiguration());
+            //modelBuilder.ApplyConfiguration(new GameConfiguration());
+            //modelBuilder.ApplyConfiguration(new MusicTrackConfiguration());
+            //modelBuilder.ApplyConfiguration(new WorkoutConfiguration());
+            //modelBuilder.ApplyConfiguration(new MangaConfiguration());
+
+
             modelBuilder.Entity<Anime>().ToTable("Anime");
             modelBuilder.Entity<Manga>().ToTable("Manga");
             modelBuilder.Entity<Workout_BodyBuilding>().ToTable("BodyBuilding");
