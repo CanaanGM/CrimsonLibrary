@@ -1,4 +1,6 @@
-﻿using CrimsonLibrary.Data.Models;
+﻿using CrimsonLibrary.Data.DataAccess;
+using CrimsonLibrary.Data.Models;
+using CrimsonLibrary.Data.Models.Domain;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -21,9 +23,12 @@ namespace CrimsonLibrary.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public IDbContext _context { get; }
+
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         [HttpGet]
@@ -37,6 +42,14 @@ namespace CrimsonLibrary.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpPost]
+        public  IActionResult CreateGame([FromBody] Game game)
+        {
+            var g =  _context.CreateNewGame(game);
+            return Ok( g);
+
         }
     }
 }
