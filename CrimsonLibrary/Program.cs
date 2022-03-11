@@ -1,5 +1,11 @@
+using CrimsonLibrary.Data.DataAccess;
+using CrimsonLibrary.Data.ModelHelpers;
+
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -14,8 +20,12 @@ namespace CrimsonLibrary
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+            var host = CreateHostBuilder(args).Build();
+            using var scope = host.Services.CreateScope();
+            var services = scope.ServiceProvider;
+
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.File(
                 path: ".\\CrimsonLibrary\\logs\\log-.txt",
@@ -29,6 +39,12 @@ namespace CrimsonLibrary
                 .CreateLogger();
             try
             {
+                var context = services.GetRequiredService<DatabaseContext>();
+                Log.Information("Migrating Database . . .");
+                await context.Database.MigrateAsync(); 
+                await Seed.SeedData(context);
+                Log.Information("Migrating Done~! . . .");
+                
                 Log.Information("Application is starting . . .");
                 CreateHostBuilder(args).Build().Run();
             }
