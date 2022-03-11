@@ -6,6 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\DtoProfiles\**" />
+    <Compile Remove="Data\Dtos\**" />
+    <Content Remove="Data\DtoProfiles\**" />
+    <Content Remove="Data\Dtos\**" />
+    <EmbeddedResource Remove="Data\DtoProfiles\**" />
+    <EmbeddedResource Remove="Data\Dtos\**" />
+    <None Remove="Data\DtoProfiles\**" />
+    <None Remove="Data\Dtos\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0">
@@ -14,11 +26,6 @@
     </PackageReference>
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\Dtos\" />
-    <Folder Include="Data\DtoProfiles\" />
   </ItemGroup>
 
 </Project>
