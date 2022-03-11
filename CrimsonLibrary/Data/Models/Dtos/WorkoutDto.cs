@@ -1,20 +1,24 @@
 ﻿using CrimsonLibrary.Data.Models.JoinTables;
-
-using System;
 using System.Collections.Generic;
+using System;
 
-namespace CrimsonLibrary.Data.Models.Domain
+namespace CrimsonLibrary.Data.Models.Dtos
 {
-    public class Workout_BodyBuilding
+
+
+    public class WorkoutCreateDto
     {
-        public Guid Id { get; set; }
         public string Week { get; set; }
         public string Part { get; set; }
         public string CycleType { get; set; } // scientific name goes here
-        public virtual IList<Exercise> Excersises { get; set; }
+        public virtual IList<ExerciseDto> Excersises { get; set; }
         public double Duration { get; set; }
         public string Day { get; internal set; }
+
     }
 
-
+    public class WorkoutDto : WorkoutCreateDto
+    {
+        public Guid Id { get; set; }
+    }
 }

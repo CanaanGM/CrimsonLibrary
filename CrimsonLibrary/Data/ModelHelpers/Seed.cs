@@ -289,18 +289,11 @@ namespace CrimsonLibrary.Data.ModelHelpers
                         Part = "Leg",
                         Duration = 2.5,
                         CycleType = "FUCK",
-                        Excersises = new List<Workout_Exercise>
-                        {
-                            new Workout_Exercise
-                            {
-                                Id = new Guid(),
-                                Excercise_Id = exersises[0].Id,
-                                Exercise = exersises[0]
-                            }
-                        }
+                        Excersises = new List<Exercise>()
 
                     }
                 };
+                foreach(var leg in exersises) bbWorkouts[0].Excersises.Add(leg);
                 await context.BodyBuildingWorkouts.AddRangeAsync(bbWorkouts);
 
                 await context.SaveChangesAsync();

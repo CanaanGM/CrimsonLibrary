@@ -41,14 +41,14 @@ namespace CrimsonLibrary.Data.DataAccess
             modelBuilder.Entity<Manga>().ToTable("Manga");
             modelBuilder.Entity<Workout_BodyBuilding>().ToTable("BodyBuilding");
 
-            modelBuilder.Entity<Workout_Exercise>()
-                .HasOne(x=>x.Exercise)
-                .WithMany(w=>w.Workouts)
-                .HasForeignKey(q=>q.Workout_Id);
-            modelBuilder.Entity<Workout_Exercise>()
-                .HasOne(q=>q.Workout)
-                .WithMany(e=>e.Excersises)
-                .HasForeignKey(w=>w.Excercise_Id);
+            //modelBuilder.Entity<Workout_Exercise>()
+            //    .HasOne(x=>x.Exercise)
+            //    .WithMany(w=>w.Workouts)
+            //    .HasForeignKey(q=>q.Workout_Id);
+            //modelBuilder.Entity<Workout_Exercise>()
+            //    .HasOne(q=>q.Workout)
+            //    .WithMany(e=>e.Excersises)
+            //    .HasForeignKey(w=>w.Excercise_Id);
 
             //modelBuilder.Entity<Wishlist>().ToTable("Wishlist");
             //modelBuilder.Entity<Game_Series>()

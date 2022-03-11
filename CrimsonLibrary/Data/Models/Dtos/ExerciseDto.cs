@@ -1,13 +1,10 @@
-﻿using CrimsonLibrary.Data.Models.JoinTables;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace CrimsonLibrary.Data.Models.Domain
+namespace CrimsonLibrary.Data.Models.Dtos
 {
-    public class Exercise
+    public class ExerciseCreateDto
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Reps { get; set; }
@@ -16,8 +13,11 @@ namespace CrimsonLibrary.Data.Models.Domain
         public double Sets { get; internal set; }
         public double WeightKG { get; set; }
         public int TimesDone { get; set; }
+    }
 
-
-        public virtual IList<Workout_Exercise> Workouts { get; set; }
+    public class ExerciseDto : ExerciseCreateDto
+    {
+        public Guid Id { get; set; }
+        public virtual IList<WorkoutDto> Workouts { get; set; }
     }
 }

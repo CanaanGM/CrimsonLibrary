@@ -1,6 +1,14 @@
 Web Api to keep track of things i do 
 
-finance [O]
+
+entities as simple as possible
+will be grouped depending on some prop they have
+ie : Anime -> date, series, artist
+
+
+Images to be stores in a file system or something 
+
+finance [O] 
   |- monthly stuff 
     |- depends on weekly
     |- monthly subs
@@ -25,7 +33,7 @@ reading [O]
   |- books reading
   |- done reading
   |- favourite books
-music
+music [O]
   |- albums
   |- fav tracks
   |- bands

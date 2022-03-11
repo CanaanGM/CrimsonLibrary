@@ -1,4 +1,5 @@
 using CrimsonLibrary.Data.DataAccess;
+using CrimsonLibrary.Data.Models.DtoProfiles;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,6 +40,8 @@ namespace CrimsonLibrary
             services.AddDbContext<DatabaseContext>(options =>
                 options.UseSqlServer(Configuration["ConnectionStrings:SqlServer"] + $"user id={name}; password={pass}")
             );
+
+            services.AddAutoMapper(typeof(MapperProfiles));
 
             services.AddSwaggerGen(c =>
             {
