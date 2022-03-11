@@ -1,5 +1,7 @@
 using CrimsonLibrary.Data.DataAccess;
+using CrimsonLibrary.Data.IReopsitory;
 using CrimsonLibrary.Data.Models.DtoProfiles;
+using CrimsonLibrary.Data.Repository;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,7 +25,9 @@ namespace CrimsonLibrary
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(op => 
+                    op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
             services.AddCors(
                 x =>
                 {
@@ -42,7 +46,7 @@ namespace CrimsonLibrary
             );
 
             services.AddAutoMapper(typeof(MapperProfiles));
-
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CrimsonLibrary", Version = "v1" });
