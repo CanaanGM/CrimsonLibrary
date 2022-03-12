@@ -18,13 +18,13 @@ namespace CrimsonLibrary.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AnimeController : ControllerBase
+    public class MangaController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ILogger<AnimeController> _logger;
+        private readonly ILogger<MangaController> _logger;
         private readonly IMapper _mapper;
 
-        public AnimeController(IUnitOfWork unitOFWork, ILogger<AnimeController> logger, IMapper mapper)
+        public MangaController(IUnitOfWork unitOFWork, ILogger<MangaController> logger, IMapper mapper)
         {
             _unitOfWork = unitOFWork;
             _logger = logger;
@@ -36,10 +36,10 @@ namespace CrimsonLibrary.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get([FromQuery] RequestParams requestParams)
-        {
-            var anime = await _unitOfWork.Anime.GetAll(requestParams);
-            var res = _mapper.Map<List<AnimeDto>>(anime);
-            if (anime == null) return NotFound();
+{
+            var manga = await _unitOfWork.Manga.GetAll(requestParams);
+            var res = _mapper.Map<List<MangaDto>>(manga);
+            if (manga == null) return NotFound();
             return Ok(res);
         }
 
@@ -47,24 +47,24 @@ namespace CrimsonLibrary.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetFilteredName(string name)
+        public async Task<IActionResult> Get(string name)
         {
             return !string.IsNullOrEmpty(name)
-                ? Ok(_mapper.Map<List<AnimeDto>>(await _unitOfWork.Anime.GetAll(
-                    expression: x=>x.Name.Contains(name) ))) 
+                ? Ok(_mapper.Map<List<AnimeDto>>(await _unitOfWork.Manga.GetAll(
+                    expression: x => x.Name.Contains(name))))
                 : NotFound();
         }
 
 
-        [HttpGet("{id:Guid}", Name ="GetAnime")]
+        [HttpGet("{id:Guid}", Name = "GetManga")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get(Guid id)
         {
-            var anime = await _unitOfWork.Anime.Get(x => x.Id == id);
-            var res = _mapper.Map<AnimeDto>(anime);
-            if (anime == null) return NotFound();
+            var manga = await _unitOfWork.Manga.Get(x => x.Id == id);
+            var res = _mapper.Map<MangaDto>(manga);
+            if (manga == null) return NotFound();
             return Ok(res);
         }
 
@@ -73,40 +73,40 @@ namespace CrimsonLibrary.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Create([FromBody] AnimeCreateDto dto)
+        public async Task<IActionResult> Create([FromBody] MangaCreateDto dto)
         {
             if (!ModelState.IsValid)
             {
                 _logger.LogError($"Invalid POST attempt in {nameof(Create)}");
                 return BadRequest();
             }
-            var anime = _mapper.Map<Anime>(dto);
-            await _unitOfWork.Anime.Insert(anime);
+            var manga = _mapper.Map<Manga>(dto);
+            await _unitOfWork.Manga.Insert(manga);
             await _unitOfWork.Save();
 
-            return CreatedAtRoute("GetAnime", new { id = anime.Id }, anime);
+            return CreatedAtRoute("GetManga", new { id = manga.Id }, manga);
         }
 
         [HttpPut("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Update(Guid id, [FromBody] AnimeUpdateDto updateDto)
+        public async Task<IActionResult> Update(Guid id, [FromBody] MangaUpdateDto updateDto)
         {
             if (!ModelState.IsValid)
             {
                 _logger.LogError($"Invalid PUT attempt in {nameof(Update)}");
                 return BadRequest(ModelState);
             }
-            var anime = await _unitOfWork.Anime.Get(x => x.Id == id);
-            if (anime == null)
+            var manga = await _unitOfWork.Manga.Get(x => x.Id == id);
+            if (manga == null)
             {
                 _logger.LogError($"Invalid PUT attempt in {nameof(Update)}");
                 return BadRequest("Submitted data is invalid");
             }
 
-            _mapper.Map(updateDto, anime);
-            _unitOfWork.Anime.Update(anime);
+            _mapper.Map(updateDto, manga);
+            _unitOfWork.Manga.Update(manga);
             await _unitOfWork.Save();
             return NoContent();
         }
@@ -117,13 +117,13 @@ namespace CrimsonLibrary.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var anime = await _unitOfWork.Anime.Get(x => x.Id == id);
-            if (anime == null)
+            var manga = await _unitOfWork.Manga.Get(x => x.Id == id);
+            if (manga == null)
             {
                 _logger.LogError($"Invalid PUT attempt in {nameof(Delete)}");
                 return NotFound();
             }
-            await _unitOfWork.Anime.Delete(anime.Id);
+            await _unitOfWork.Manga.Delete(manga.Id);
             await _unitOfWork.Save();
             return NoContent();
         }

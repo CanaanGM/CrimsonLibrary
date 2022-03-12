@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CrimsonLibrary.Controllers
@@ -32,6 +33,7 @@ namespace CrimsonLibrary.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get([FromQuery] RequestParams requestParams)
         {
@@ -39,8 +41,19 @@ namespace CrimsonLibrary.Controllers
             return workouts != null ? Ok(_mapper.Map<List<WorkoutDto>>(workouts)) : NotFound();
         }
 
+        //[HttpGet("{date:string, cycleType:string, duration:double}")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //public async Task<IActionResult> Get(string date = null,string cycleType = null, double duration =0 )
+        //{
+
+        //    var workouts = await _unitOfWork.Workouts.GetAll();
+        //    return workouts != null ? Ok(_mapper.Map<List<WorkoutDto>>(workouts)) : NotFound();
+        //}
+
         [HttpGet("{id:Guid}", Name = "GetWorkout")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get(Guid id)
         {                                                                                                                      // has to match the domain prop
@@ -49,11 +62,14 @@ namespace CrimsonLibrary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateWorkout([FromBody] WorkoutCreateDto dto)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Create([FromBody] WorkoutCreateDto dto)
         {
             if (!ModelState.IsValid)
             {
-                _logger.LogError($"Invalid POST attempt in {nameof(CreateWorkout)}");
+                _logger.LogError($"Invalid POST attempt in {nameof(Create)}");
                 return BadRequest();
             }
             var workout = _mapper.Map<Workout_BodyBuilding>(dto);
@@ -64,17 +80,20 @@ namespace CrimsonLibrary.Controllers
         }
 
         [HttpPut("{id:Guid}")]
-        public async Task<IActionResult> UpdateWorkout(Guid id, [FromBody] WorkoutUpdateDto updateDto)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Update(Guid id, [FromBody] WorkoutUpdateDto updateDto)
         {
             if (!ModelState.IsValid)
             {
-                _logger.LogError($"Invalid PUT attempt in {nameof(UpdateWorkout)}");
+                _logger.LogError($"Invalid PUT attempt in {nameof(Update)}");
                 return BadRequest(ModelState);
             }
             var workout = await _unitOfWork.Workouts.Get(x => x.Id == id);
             if (workout == null)
             {
-                _logger.LogError($"Invalid PUT attempt in {nameof(UpdateWorkout)}");
+                _logger.LogError($"Invalid PUT attempt in {nameof(Update)}");
                 return BadRequest("Submitted data is invalid");
             }
 
@@ -85,10 +104,17 @@ namespace CrimsonLibrary.Controllers
         }
 
         [HttpDelete("{id:Guid}")]
-        public async Task<IActionResult> DeleteWorkout(Guid id)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Delete(Guid id)
         {
             var workout = await _unitOfWork.Workouts.Get(x => x.Id == id);
-            if (workout == null) return NotFound();
+            if (workout == null)
+            {
+                _logger.LogError($"Invalid PUT attempt in {nameof(Delete)}");
+                return NotFound();
+            }
             await _unitOfWork.Workouts.Delete(workout.Id);
             await _unitOfWork.Save();
             return NoContent();
