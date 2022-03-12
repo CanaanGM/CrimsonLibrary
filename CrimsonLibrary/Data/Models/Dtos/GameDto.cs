@@ -35,5 +35,5 @@ namespace CrimsonLibrary.Data.Models.Dtos
         public DateTime DateModified { get; set; } = DateTime.UtcNow;
         public DateTime DateAddedToDatabase { get; } = DateTime.UtcNow;
     }
-
+    public class GameUpdateDto : GameCreateDto{}
 }

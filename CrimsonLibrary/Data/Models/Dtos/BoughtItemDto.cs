@@ -26,4 +26,6 @@ namespace CrimsonLibrary.Data.Models.Dtos
 
         public DateTime DateAddedToDatabase { get; } = DateTime.UtcNow;
     }
+
+    public class BoughtItemUpdateDto : BoughtItemCreateDto{}
 }
