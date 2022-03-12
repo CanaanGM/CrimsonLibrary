@@ -1,5 +1,6 @@
 ﻿using CrimsonLibrary.Data.DataAccess;
 using CrimsonLibrary.Data.IReopsitory;
+using CrimsonLibrary.Data.Models;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+
+using X.PagedList;
 
 namespace CrimsonLibrary.Data.Repository
 {
@@ -32,16 +35,17 @@ namespace CrimsonLibrary.Data.Repository
         {
             _db.RemoveRange(entities);
         }
-                                // allows for a lambda to be passed
-                                // so this becomes the lambda
-                                // x=>x.id or x.name or x.date ... etc
+
+        // allows for a lambda to be passed
+        // so this becomes the lambda
+        // x=>x.id or x.name or x.date ... etc
         public async Task<T> Get(Expression<Func<T, bool>> expression, List<string> includes = null)
         {
             IQueryable<T> query = _db;
             if (includes != null)
                 foreach (var includedProp in includes)
                 {
-                    query= query.Include(includedProp);
+                    query = query.Include(includedProp);
                 }
             return await query.AsNoTracking().FirstOrDefaultAsync(expression);
         }
@@ -50,7 +54,7 @@ namespace CrimsonLibrary.Data.Repository
             Expression<Func<T, bool>> expression = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, List<string> includes = null)
         {
             IQueryable<T> query = _db;
-            
+
             if (expression != null)
                 query = query.Where(expression);
 
@@ -66,9 +70,23 @@ namespace CrimsonLibrary.Data.Repository
             return await query.AsNoTracking().ToListAsync();
         }
 
+        public async Task<IPagedList<T>> GetAll(
+             RequestParams requestParams,
+             List<string> includes = null
+            )
+        {
+            IQueryable<T> query = _db;
+            if (includes != null)
+                foreach (var includedProp in includes)
+                {
+                    query = query.Include(includedProp);
+                }
+            return await query.AsNoTracking().ToPagedListAsync(requestParams.PageNumber, requestParams.PageSize);
+        }
+
         public async Task Insert(T entity)
         {
-            await _db.AddAsync(entity); 
+            await _db.AddAsync(entity);
         }
 
         public async Task InsertRange(IEnumerable<T> entities)

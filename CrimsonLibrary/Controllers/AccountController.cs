@@ -17,7 +17,6 @@ namespace CrimsonLibrary.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserManager<ApiUser> _userManager;
-        private readonly SignInManager<ApiUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
         private readonly IMapper _mapper;
         private readonly IAuthManager _authManager;
@@ -37,27 +36,18 @@ namespace CrimsonLibrary.Controllers
         {
             _logger.LogInformation($"Registeration attempt for {userDto.Email} ");
 
-            if(!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            try
+            var user = _mapper.Map<ApiUser>(userDto);
+            user.UserName = user.Email;
+            var res = await _userManager.CreateAsync(user, userDto.Password);
+            if (!res.Succeeded)
             {
-                var user = _mapper.Map<ApiUser>(userDto);
-                user.UserName = user.Email;
-                var res = await _userManager.CreateAsync(user, userDto.Password);
-                if (!res.Succeeded)
-                {
-                    return BadRequest($"Registeration went wrong, please try again later. \n {res.Errors}");
-                }
-                await _userManager.AddToRolesAsync(user, userDto.Roles);
-                return Accepted();
+                return BadRequest($"Registeration went wrong, please try again later. \n {res.Errors}");
             }
-            catch (System.Exception ex)
-            {
-                _logger.LogError(ex, $"Something went wrong in {nameof(Register)}");
-                return Problem($"Something went wrong in {nameof(Register)}", statusCode: 500);
-            }
+            await _userManager.AddToRolesAsync(user, userDto.Roles);
+            return Accepted();
         }
-
 
         [HttpPost]
         [Route("login")]
@@ -67,18 +57,9 @@ namespace CrimsonLibrary.Controllers
 
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            try
-            {
-                if (!await _authManager.ValidateUser(userDto)) return Unauthorized(userDto);
+            if (!await _authManager.ValidateUser(userDto)) return Unauthorized(userDto);
 
-                return Accepted(new { Token = await _authManager.CreateToken()});
-            }
-            catch (System.Exception ex)
-            {
-                _logger.LogError(ex, $"Something went wrong in {nameof(LogIn)}");
-                return Problem($"Something went wrong in {nameof(LogIn)}", statusCode: 500);
-            }
+            return Accepted(new { Token = await _authManager.CreateToken() });
         }
-
     }
 }

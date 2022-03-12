@@ -1,12 +1,18 @@
 ﻿using CrimsonLibrary.Data.DataAccess;
+using CrimsonLibrary.Data.Errors;
 using CrimsonLibrary.Data.Models;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+
+using Serilog;
 
 using System.Text;
 
@@ -44,6 +50,31 @@ namespace CrimsonLibrary.Extensions
                     };
                 })
                 ;
+        }
+
+
+        public static void ConfigureExceptionHandler( this IApplicationBuilder builder)
+        {
+            builder.UseExceptionHandler(error =>
+           {
+               error.Run(async context =>
+               {
+                   context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                   context.Response.ContentType = "application/json";
+                   var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+
+                   if (contextFeature != null)
+                   {
+                       Log.Error($"Something went wrong in {contextFeature.Error}");
+
+                       await context.Response.WriteAsync(new Error
+                       {
+                           StatusCode = context.Response.StatusCode, 
+                           Message = "Internal server error, please try again later~!"
+                       }.ToString());
+                   }
+               });
+           });
         }
     }
 }

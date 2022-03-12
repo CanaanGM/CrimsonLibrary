@@ -1,8 +1,12 @@
-﻿using System;
+﻿using CrimsonLibrary.Data.Models;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+
+using X.PagedList;
 
 namespace CrimsonLibrary.Data.IReopsitory
 {
@@ -20,6 +24,7 @@ namespace CrimsonLibrary.Data.IReopsitory
         Task Delete(Guid id);
         void DeleteRange(IEnumerable<T> entities);
         void Update(T entity);
+        Task<IPagedList<T>> GetAll(RequestParams requestParams, List<string> includes = null);
     }
 }
     

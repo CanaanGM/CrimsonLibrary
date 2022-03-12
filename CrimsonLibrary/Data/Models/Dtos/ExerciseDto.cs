@@ -10,7 +10,7 @@ namespace CrimsonLibrary.Data.Models.Dtos
         public string Reps { get; set; }
         public string Picture { get; set; }
         public string Type { get; set; }
-        public double Sets { get; internal set; }
+        public double Sets { get;  set; }
         public double WeightKG { get; set; }
         public int TimesDone { get; set; }
     }
@@ -19,5 +19,10 @@ namespace CrimsonLibrary.Data.Models.Dtos
     {
         public Guid Id { get; set; }
         public virtual IList<WorkoutDto> Workouts { get; set; }
+    }
+
+    public class ExerciseUpdateDto : ExerciseCreateDto
+    {
+
     }
 }
