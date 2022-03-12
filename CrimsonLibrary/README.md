@@ -1,136 +1,50 @@
-Web Api to keep track of things i do 
+## Welcome ~!
 
+Web Api to keep track of things i do, more like a logging system side project.
+utilizes Repository with unit of work design patters
 
-entities as simple as possible
-will be grouped depending on some prop they have
-ie : Anime -> date, series, artist
+has authentication but it is there for fun, thought i wanted it but _nope!
 
+**don't care about secrets** cause the API will live on my personal machine and will be only accessable via my local network.
 
-Images to be stores in a file system or something 
+for the API endpoints docs swagger has this covered just run it !
 
-finance [O] 
-  |- monthly stuff 
-    |- depends on weekly
-    |- monthly subs
-  |- weekly 
-    |- depends on daily
-  |- daily
-    |- money spent daily (null is ok)
+####  how to run:
+clone it
+and then 
+``` docker-compose up ``` 
+(it will take care of the secrets itsef)
+###### dont forget these: 
+1. **_kills all running containers
+``` 
+docker kill $(docker ps -q)
+```
+2. **_deletes all stopped containers
+```
+docker rm $(docker ps -a -q)
+```
+3. **_deletes all images
+```
+docker rmi $(docker images -q)
+```
 
-workouts [O]
-  |- cycle (month and two weeks)
-  |- daily logging 
-    |- each workout is a class
+otherwise do to initilize and set the secrets :
+	- need to be in the same directory as the API
+```
+ dotnet user-secrets init
+ dotnet user-secrets set "SQLSERVER:User" "sa"
+ dotnet user-secrets set "SQLSERVER:Pass" < whatever u want >
+ dotnet user-secrets set "jwtKey" <whatever u want >
+```
 
-games [O]
-  |- games played
-  |- wanting to play
-  |- games done
-  |- fave games 
-reading [O]
-  |- books read
-  |- books important to read 
-  |- books reading
-  |- done reading
-  |- favourite books
-music [O]
-  |- albums
-  |- fav tracks
-  |- bands
-anime [O]
-  |- watched
-    |- rating
-  |- watching
-  |- wanting to watch
-manga [O]
-  |- reading
-  |- read
-  |- done
-movies
-  |- watched
-  |- will watch
-  |- done
-shows
-  |- watched 
-  |- will watch
-  |- done
-decks 
- |- fave cards 
- |- most fave card
- |- 
-
-
-
-
- queries :
-
- bought item -> 
-    |- get() returns new class containing [bought items]
-    |- create() 
-    |- update()
-    |- delete()
-
-
-create anime example:
-{
-    name:"Gatcha-man crowds insight",
-    description: "",
-    coverImage: "",
-    Genre: "",
-    SubGenres: "action, comedy, sci-fi",
-    tags : "tag1, tag2, tag3",
-    faveCharacter: "hajime",
-    isWatched : true,
-    onGoing: false
-}
-create game example:
-{
-    name:"Elden Ring",
-    description: "",
-    coverImage: "",
-    Genre: "",
-    SubGenres: "action, comedy, sci-fi",
-    tags : "tag1, tag2, tag3",
-    FaveCharacter: "patches",
-    isPlaying: true,
-    DonePlaying: ! isPlaying,
-    favorite : true
-}
-
-create manga example:
-{
-    name:"Bastard!!",
-    description: "",
-    coverImage: "",
-    Genre: "",
-    SubGenres: "action, comedy, sci-fi",
-    tags : "tag1, tag2, tag3",
-    faveCharacter : "Darch",
-    artists: "",
-    authors : "",
-    series: "",
-    chapters : 200,
-    Completed : false,
-    ReadToFinish : true 
-}
-
-create book example:
-{
-    name:"Fulgrim",
-    description: "",
-    coverImage: "",
-    Genre: "",
-    SubGenres: "action, comedy, sci-fi",
-    tags : "tag1, tag2, tag3",
-    series : "",
-    pages : 600,
-    Favorite : true,
-
-}
-
-create workout example:
-{
-    too long ;=;
-}
-
+things todo:
+- [ ] document it then link to it here
+- [ ] setup more endpoints
+- [ ] test
+- [ ] github actions
+- [ ] make the relations better (need to learn more~!)
+- [ ] workflow diagram
+- [ ] draw ... i forgot what's it called xD
+- [ ] health endpoint
+- [ ] images instead of strings ya fool!!
 
