@@ -73,6 +73,7 @@ namespace CrimsonLibrary
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CrimsonLibrary v1"));
 
+            app.ConfigureExceptionHandler(); // custom exception
             app.UseHttpsRedirection();
 
             app.UseCors("AllowAll");
