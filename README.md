@@ -15,15 +15,15 @@ and then
 ``` docker-compose up ``` 
 (it will take care of the secrets itsef)
 ###### dont forget these: 
-1. **_kills all running containers
+1. **_kills all running containers**
 ``` 
 docker kill $(docker ps -q)
 ```
-2. **_deletes all stopped containers
+2. **_deletes all stopped containers**
 ```
 docker rm $(docker ps -a -q)
 ```
-3. **_deletes all images
+3. **_deletes all images**
 ```
 docker rmi $(docker images -q)
 ```
