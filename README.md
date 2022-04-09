@@ -14,7 +14,7 @@ clone it
 and then 
 ``` docker-compose up ``` 
 (it will take care of the secrets itsef)
-###### dont forget these: 
+#### dont forget these: 
 1. **_kills all running containers_**
 ``` 
 docker kill $(docker ps -q)
@@ -28,17 +28,20 @@ docker rm $(docker ps -a -q)
 docker rmi $(docker images -q)
 ```
 
-otherwise do to initilize and set the secrets :
+to initilize and set the secrets and the https certificate:
 	- need to be in the same directory as the API
 ```
  dotnet user-secrets init
  dotnet user-secrets set "SQLSERVER:User" "sa"
  dotnet user-secrets set "SQLSERVER:Pass" < whatever u want >
  dotnet user-secrets set "jwtKey" <whatever u want >
+
+ dotnet user-secrets set "Kestrel:Certificates:Development:Password" "<PASSWORD>"
 ```
 
 things todo:
-- [ ] document it then link to it here
+
+- [x] document it then link to it here
 - [ ] setup more endpoints
 - [ ] test
 - [ ] github actions

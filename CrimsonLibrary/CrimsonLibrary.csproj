@@ -2,9 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <UserSecretsId>e6005169-4804-4d23-a68f-f3914a26a8ea</UserSecretsId>
+    <UserSecretsId>CrimzonLibrary-ecf09144-191b-44b6-b06c-3349750acd7c</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>

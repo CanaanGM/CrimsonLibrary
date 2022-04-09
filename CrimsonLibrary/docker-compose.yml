@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  crimsonlibrary:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "6789:80"
+      - "9789:443"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "https://+;http://+"
+      ASPNETCORE_HTTPS_PORT: "9789"
+    volumes:
+      - ${APPDATA}\Microsoft\UserSecrets\:/root/.microsoft/usersecrets
+      - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https
+    depends_on:
+      - crimsonDatabase
+    container_name: CrimzonLibraryAPI
+
+  crimsonDatabase:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+      SA_PASSWORD: "DiLb984ImW"
+      ACCEPT_EULA: "Y"
+    ports:
+     - "1434:1433" 
+    restart: always
+    volumes:
+      - "./SqlServer-db-data:/var/opt/mssql/data"
+    container_name: CrimsonDatabase
+
+
+volumes: 
+  db-data:

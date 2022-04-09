@@ -4,10 +4,12 @@ using CrimsonLibrary.Data.Models;
 using CrimsonLibrary.Data.Models.Dtos;
 using CrimsonLibrary.Services;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CrimsonLibrary.Controllers
@@ -30,6 +32,7 @@ namespace CrimsonLibrary.Controllers
             _authManager = authManager;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] UserDto userDto)
@@ -43,12 +46,15 @@ namespace CrimsonLibrary.Controllers
             var res = await _userManager.CreateAsync(user, userDto.Password);
             if (!res.Succeeded)
             {
-                return BadRequest($"Registeration went wrong, please try again later. \n {res.Errors}");
+                var errors = "";
+                foreach (var error in res.Errors) errors += $" {error.Description} \n ";
+                return BadRequest($"Registeration went wrong, please try again later. \n {errors}");
             }
             await _userManager.AddToRolesAsync(user, userDto.Roles);
             return Accepted();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> LogIn([FromBody] UserLoginDto userDto)
