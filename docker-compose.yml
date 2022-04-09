@@ -6,7 +6,19 @@ services:
     build:
       context: .
       dockerfile: CrimsonLibrary/Dockerfile
-    container_name: CrimzonLibrary
+    ports:
+      - "6789:80"
+      - "9789:443"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "https://+;http://+"
+      ASPNETCORE_HTTPS_PORT: "9789"
+    volumes:
+      - ${APPDATA}\Microsoft\UserSecrets\:/root/.microsoft/usersecrets
+      - ${USERPROFILE}\.aspnet\https:/root/.aspnet/https
+    depends_on:
+      - crimsonDatabase
+    container_name: CrimzonLibraryAPI
 
   crimsonDatabase:
     image: "mcr.microsoft.com/mssql/server"
