@@ -34,7 +34,8 @@ otherwise do to initilize and set the secrets :
  dotnet user-secrets init
  dotnet user-secrets set "SQLSERVER:User" "sa"
  dotnet user-secrets set "SQLSERVER:Pass" < whatever u want >
- dotnet user-secrets set "jwtKey" <whatever u want >
+ dotnet user-secrets set "jwtKey" < whatever u want >
+ dotnet user-secrets set "Kestrel:Certificates:Development:Password" "Crimz0n!" 
 ```
 
 things todo:
@@ -47,3 +48,4 @@ things todo:
 - [ ] draw ... i forgot what's it called xD
 - [ ] health endpoint
 - [ ] images instead of strings ya fool!!
+- [x] https for docker.
